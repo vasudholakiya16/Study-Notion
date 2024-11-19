@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const mailSender = require('../utils/MailSend');
+const crypto = require('crypto');
 
 // resetPasswordToken
 
@@ -43,3 +44,53 @@ exports.resetPasswordToken = async (req, res) => {
 };
 
 // resetPassword
+
+exports.resetPassword = async (req, res) => {
+    try {
+         // fetch the data 
+         const{passwoed, confirmPassword, token} = req.body;
+         //validition
+         if(passwoed !== confirmPassword){
+             return res.status(400).json({ success: false, message: 'Password and confirm password should be same' });
+         }
+         // get user details from db using token
+         const userDetail = await User.findOne({token:token});
+         // if not entryfound - invalid token
+         if(!userDetail){
+             return res.status(400).json({ success: false, message: 'Invalid token' });
+            }
+
+         // check for expiration time - if expired - invalid token
+            if(userDetail.resetPasswordExpires < Date.now()){
+                return res.status(400).json({ success: false, message: 'Token expired, place regenerat your token ' });
+            }
+         // hash the password
+            const hashedPassword = await bcrypt.hash(passwoed, 10);
+            console.log(
+                'hashedPassword', hashedPassword
+            );
+         // update the password in db
+         await User.findOneAndUpdate(
+            {token:token},
+             {password:hashedPassword, 
+                },
+                 {new:true},
+
+            );
+
+         // send a respince
+
+            return res.status(200).json({ success: true, message: 'Password reset successfully' });
+          
+
+
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: 'Somenthing went wrone while reseting password' });
+        
+    }
+
+};
+
+
