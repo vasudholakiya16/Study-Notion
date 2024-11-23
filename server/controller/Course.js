@@ -1,5 +1,5 @@
 const Course = require('../models/Course');
-const Tag = require('../models/Tags');
+const Tag = require('../models/Category');
 const User = require('../models/User');
 const { uploadImageToCloudinary } = require('../utils/ImageUploader');
 
@@ -81,8 +81,14 @@ exports.createCourse = async (req, res) => {
 
 // get all courses handler function
 
-exports.showAllCourses = async (req, res) => {
+exports.showAllCourses = async (req, res) => { 
+    
     try {
+        const allCourses = await Course.find({},{courseName:true,  price:true, thumbnail:true,instructor:true,ratingAndReviews:true,
+            studentsEnrolled:true
+        }).populate('instructor').exec();
+
+        return res.status(200).json({ success: true, courses: allCourses, message: 'All courses return successfully ' });
 
         
     } catch (error) {
