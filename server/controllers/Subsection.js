@@ -1,16 +1,17 @@
+// Import necessary modules
 const Section = require("../models/Section")
 const SubSection = require("../models/SubSection")
-const { uploadImageToCloudinary } = require("../utils/ImageUploader")
+const { uploadImageToCloudinary } = require("../utils/imageUploader")
 
 // Create a new sub-section for a given section
 exports.createSubSection = async (req, res) => {
   try {
     // Extract necessary information from the request body
-    const { sectionId, title, timeDuration } = req.body // Get the sectionId, title and description from the request 
-    const video = req.files.videoFile // Get the video file from the request
+    const { sectionId, title, description } = req.body
+    const video = req.files.video
 
     // Check if all necessary fields are provided
-    if (!sectionId || !title || !timeDuration || !videoFile) {
+    if (!sectionId || !title || !description || !video) {
       return res
         .status(404)
         .json({ success: false, message: "All Fields are Required" })
@@ -20,7 +21,7 @@ exports.createSubSection = async (req, res) => {
     // Upload the video file to Cloudinary
     const uploadDetails = await uploadImageToCloudinary(
       video,
-      process.env.CLOUDINARY_COURSE_FOLDER
+      process.env.FOLDER_NAME
     )
     console.log(uploadDetails)
     // Create a new sub-section with the necessary information
@@ -39,9 +40,7 @@ exports.createSubSection = async (req, res) => {
     ).populate("subSection")
 
     // Return the updated section in the response
-    return res.status(200).json({ success: true, data: updatedSection,
-        message: "SubSection created successfully"   
-     })
+    return res.status(200).json({ success: true, data: updatedSection })
   } catch (error) {
     // Handle any errors that may occur during the process
     console.error("Error creating new sub-section:", error)
@@ -76,7 +75,7 @@ exports.updateSubSection = async (req, res) => {
       const video = req.files.video
       const uploadDetails = await uploadImageToCloudinary(
         video,
-        process.env.CLOUDINARY_COURSE_FOLDER
+        process.env.FOLDER_NAME
       )
       subSection.videoUrl = uploadDetails.secure_url
       subSection.timeDuration = `${uploadDetails.duration}`
