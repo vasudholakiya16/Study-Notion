@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema(
 			type: Date,
 		},
 		image: {
-			type: String,
+			type: String, 
 			required: true,
 		},
 		courseProgress: [
