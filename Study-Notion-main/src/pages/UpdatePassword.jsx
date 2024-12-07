@@ -24,7 +24,7 @@ const UpdatePassword = () => {
     const handleOnChange = (e) => {
         setFormData((prevData) => ({
         ...prevData,
-        [e.target.name]: e.target.value,
+        [e.target.name]: e.target.value, // updat our form data 
         }))
     }
 
