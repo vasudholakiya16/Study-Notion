@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import CountryCode from "../../data/countrycode.json";
 import { apiConnector } from "../../services/apiconnector";
 import { contactusEndpoint } from "../../services/apis";
-import CountryCode from "../../data/countrycode.json"
 
 const ContactUsForm = () => {
 
@@ -21,6 +21,9 @@ const ContactUsForm = () => {
         "POST",
         contactusEndpoint.CONTACT_US_API,
         data
+      );
+      console.log(
+        "Contact Us Form Submitted Successfully - ", res
       );
       setLoading(false);
     }
