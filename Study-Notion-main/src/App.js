@@ -4,6 +4,7 @@ import Navbar from "./components/common/Navbar";
 import OpenRoute from "./components/core/Auth/OpenRoute";
 import PrivateRoute from "./components/core/Auth/PrivateRoute";
 import MyProfile from "./components/core/Dashboard/MyProfile";
+import Settings from "./components/core/Dashboard/Settings";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
@@ -80,6 +81,7 @@ function App() {
 
 
        <Route path="dashboard/my-profile" element={<MyProfile/>} />
+       <Route path="dashboard/Settings" element={<Settings />} />
     </Route>
       <Route path="*" element={<Error />} />
     </Routes>
